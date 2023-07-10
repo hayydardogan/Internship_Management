@@ -1,0 +1,630 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="internshipManagementModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="TBL_Akademisyenler">
+          <Key>
+            <PropertyRef Name="akaID" />
+          </Key>
+          <Property Name="akaID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="akaAdi" Type="varchar" MaxLength="50" />
+          <Property Name="akaSoyadi" Type="varchar" MaxLength="50" />
+          <Property Name="akaMail" Type="varchar" MaxLength="50" />
+          <Property Name="akaSifre" Type="varchar" MaxLength="50" />
+          <Property Name="akaTelefon" Type="varchar" MaxLength="11" />
+          <Property Name="akaFakulte" Type="tinyint" />
+          <Property Name="akaBolum" Type="int" />
+          <Property Name="akaStajTuru" Type="tinyint" />
+        </EntityType>
+        <EntityType Name="TBL_Bildirimler">
+          <Key>
+            <PropertyRef Name="bildirimID" />
+          </Key>
+          <Property Name="bildirimID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="bildirimGonderen" Type="int" />
+          <Property Name="bildirimAlan" Type="int" />
+          <Property Name="bildirimTarih" Type="datetime" />
+          <Property Name="bildirimIcerik" Type="varchar" MaxLength="150" />
+          <Property Name="bildirimOkunduMu" Type="bit" />
+        </EntityType>
+        <EntityType Name="TBL_Bolumler">
+          <Key>
+            <PropertyRef Name="bolumID" />
+          </Key>
+          <Property Name="bolumID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="bolumAdi" Type="varchar" MaxLength="50" />
+          <Property Name="fakulteID" Type="tinyint" />
+        </EntityType>
+        <EntityType Name="TBL_Dosyalar">
+          <Key>
+            <PropertyRef Name="dosyaID" />
+          </Key>
+          <Property Name="dosyaID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="dosyaAdi" Type="varchar" MaxLength="100" />
+          <Property Name="dosyaTarihi" Type="datetime" />
+          <Property Name="dosyaGonderen" Type="int" />
+          <Property Name="dosyaAciklama" Type="varchar" MaxLength="150" />
+          <Property Name="dosyaDurum" Type="varchar" MaxLength="1" />
+          <Property Name="stajTuru" Type="tinyint" />
+          <Property Name="dosyaDegerlendiren" Type="int" />
+          <Property Name="dosyaYolu" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="TBL_Fakulteler">
+          <Key>
+            <PropertyRef Name="fakulteID" />
+          </Key>
+          <Property Name="fakulteID" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fakulteAdi" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="TBL_Ogrenciler">
+          <Key>
+            <PropertyRef Name="ogrenciID" />
+          </Key>
+          <Property Name="ogrenciID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ogrenciAdi" Type="varchar" MaxLength="50" />
+          <Property Name="ogrenciSoyadi" Type="varchar" MaxLength="50" />
+          <Property Name="ogrenciNo" Type="varchar" MaxLength="10" />
+          <Property Name="ogrenciFakulte" Type="tinyint" />
+          <Property Name="ogrenciBolum" Type="int" />
+          <Property Name="ogrenciTelefon" Type="varchar" MaxLength="11" />
+          <Property Name="ogrenciMail" Type="varchar" MaxLength="50" />
+          <Property Name="ogrenciSifre" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="TBL_StajTurleri">
+          <Key>
+            <PropertyRef Name="stajID" />
+          </Key>
+          <Property Name="stajID" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="stajAdi" Type="varchar" MaxLength="25" />
+        </EntityType>
+        <Association Name="FK_TBL_Akademisyenler_TBL_Bolumler">
+          <End Role="TBL_Bolumler" Type="Self.TBL_Bolumler" Multiplicity="0..1" />
+          <End Role="TBL_Akademisyenler" Type="Self.TBL_Akademisyenler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TBL_Bolumler">
+              <PropertyRef Name="bolumID" />
+            </Principal>
+            <Dependent Role="TBL_Akademisyenler">
+              <PropertyRef Name="akaBolum" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TBL_Akademisyenler_TBL_Fakulteler">
+          <End Role="TBL_Fakulteler" Type="Self.TBL_Fakulteler" Multiplicity="0..1" />
+          <End Role="TBL_Akademisyenler" Type="Self.TBL_Akademisyenler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TBL_Fakulteler">
+              <PropertyRef Name="fakulteID" />
+            </Principal>
+            <Dependent Role="TBL_Akademisyenler">
+              <PropertyRef Name="akaFakulte" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TBL_Bildirimler_TBL_Akademisyenler">
+          <End Role="TBL_Akademisyenler" Type="Self.TBL_Akademisyenler" Multiplicity="0..1" />
+          <End Role="TBL_Bildirimler" Type="Self.TBL_Bildirimler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TBL_Akademisyenler">
+              <PropertyRef Name="akaID" />
+            </Principal>
+            <Dependent Role="TBL_Bildirimler">
+              <PropertyRef Name="bildirimGonderen" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TBL_Bildirimler_TBL_Ogrenciler">
+          <End Role="TBL_Ogrenciler" Type="Self.TBL_Ogrenciler" Multiplicity="0..1" />
+          <End Role="TBL_Bildirimler" Type="Self.TBL_Bildirimler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TBL_Ogrenciler">
+              <PropertyRef Name="ogrenciID" />
+            </Principal>
+            <Dependent Role="TBL_Bildirimler">
+              <PropertyRef Name="bildirimAlan" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TBL_Dosyalar_TBL_Akademisyenler">
+          <End Role="TBL_Akademisyenler" Type="Self.TBL_Akademisyenler" Multiplicity="0..1" />
+          <End Role="TBL_Dosyalar" Type="Self.TBL_Dosyalar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TBL_Akademisyenler">
+              <PropertyRef Name="akaID" />
+            </Principal>
+            <Dependent Role="TBL_Dosyalar">
+              <PropertyRef Name="dosyaDegerlendiren" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TBL_Dosyalar_TBL_Ogrenciler">
+          <End Role="TBL_Ogrenciler" Type="Self.TBL_Ogrenciler" Multiplicity="0..1" />
+          <End Role="TBL_Dosyalar" Type="Self.TBL_Dosyalar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TBL_Ogrenciler">
+              <PropertyRef Name="ogrenciID" />
+            </Principal>
+            <Dependent Role="TBL_Dosyalar">
+              <PropertyRef Name="dosyaGonderen" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TBL_Dosyalar_TBL_StajTurleri">
+          <End Role="TBL_StajTurleri" Type="Self.TBL_StajTurleri" Multiplicity="0..1" />
+          <End Role="TBL_Dosyalar" Type="Self.TBL_Dosyalar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TBL_StajTurleri">
+              <PropertyRef Name="stajID" />
+            </Principal>
+            <Dependent Role="TBL_Dosyalar">
+              <PropertyRef Name="stajTuru" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TBL_Ogrenciler_TBL_Bolumler">
+          <End Role="TBL_Bolumler" Type="Self.TBL_Bolumler" Multiplicity="0..1" />
+          <End Role="TBL_Ogrenciler" Type="Self.TBL_Ogrenciler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TBL_Bolumler">
+              <PropertyRef Name="bolumID" />
+            </Principal>
+            <Dependent Role="TBL_Ogrenciler">
+              <PropertyRef Name="ogrenciBolum" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TBL_Ogrenciler_TBL_Fakulteler">
+          <End Role="TBL_Fakulteler" Type="Self.TBL_Fakulteler" Multiplicity="0..1" />
+          <End Role="TBL_Ogrenciler" Type="Self.TBL_Ogrenciler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TBL_Fakulteler">
+              <PropertyRef Name="fakulteID" />
+            </Principal>
+            <Dependent Role="TBL_Ogrenciler">
+              <PropertyRef Name="ogrenciFakulte" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="internshipManagementModelStoreContainer">
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_Akademisyenler" EntityType="Self.TBL_Akademisyenler" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_Bildirimler" EntityType="Self.TBL_Bildirimler" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_Bolumler" EntityType="Self.TBL_Bolumler" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_Dosyalar" EntityType="Self.TBL_Dosyalar" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_Fakulteler" EntityType="Self.TBL_Fakulteler" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_Ogrenciler" EntityType="Self.TBL_Ogrenciler" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_StajTurleri" EntityType="Self.TBL_StajTurleri" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_TBL_Akademisyenler_TBL_Bolumler" Association="Self.FK_TBL_Akademisyenler_TBL_Bolumler">
+            <End Role="TBL_Bolumler" EntitySet="TBL_Bolumler" />
+            <End Role="TBL_Akademisyenler" EntitySet="TBL_Akademisyenler" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TBL_Akademisyenler_TBL_Fakulteler" Association="Self.FK_TBL_Akademisyenler_TBL_Fakulteler">
+            <End Role="TBL_Fakulteler" EntitySet="TBL_Fakulteler" />
+            <End Role="TBL_Akademisyenler" EntitySet="TBL_Akademisyenler" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TBL_Bildirimler_TBL_Akademisyenler" Association="Self.FK_TBL_Bildirimler_TBL_Akademisyenler">
+            <End Role="TBL_Akademisyenler" EntitySet="TBL_Akademisyenler" />
+            <End Role="TBL_Bildirimler" EntitySet="TBL_Bildirimler" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TBL_Bildirimler_TBL_Ogrenciler" Association="Self.FK_TBL_Bildirimler_TBL_Ogrenciler">
+            <End Role="TBL_Ogrenciler" EntitySet="TBL_Ogrenciler" />
+            <End Role="TBL_Bildirimler" EntitySet="TBL_Bildirimler" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TBL_Dosyalar_TBL_Akademisyenler" Association="Self.FK_TBL_Dosyalar_TBL_Akademisyenler">
+            <End Role="TBL_Akademisyenler" EntitySet="TBL_Akademisyenler" />
+            <End Role="TBL_Dosyalar" EntitySet="TBL_Dosyalar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TBL_Dosyalar_TBL_Ogrenciler" Association="Self.FK_TBL_Dosyalar_TBL_Ogrenciler">
+            <End Role="TBL_Ogrenciler" EntitySet="TBL_Ogrenciler" />
+            <End Role="TBL_Dosyalar" EntitySet="TBL_Dosyalar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TBL_Dosyalar_TBL_StajTurleri" Association="Self.FK_TBL_Dosyalar_TBL_StajTurleri">
+            <End Role="TBL_StajTurleri" EntitySet="TBL_StajTurleri" />
+            <End Role="TBL_Dosyalar" EntitySet="TBL_Dosyalar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TBL_Ogrenciler_TBL_Bolumler" Association="Self.FK_TBL_Ogrenciler_TBL_Bolumler">
+            <End Role="TBL_Bolumler" EntitySet="TBL_Bolumler" />
+            <End Role="TBL_Ogrenciler" EntitySet="TBL_Ogrenciler" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TBL_Ogrenciler_TBL_Fakulteler" Association="Self.FK_TBL_Ogrenciler_TBL_Fakulteler">
+            <End Role="TBL_Fakulteler" EntitySet="TBL_Fakulteler" />
+            <End Role="TBL_Ogrenciler" EntitySet="TBL_Ogrenciler" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="internshipManagementModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="TBL_Akademisyenler">
+          <Key>
+            <PropertyRef Name="akaID" />
+          </Key>
+          <Property Name="akaID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="akaAdi" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="akaSoyadi" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="akaMail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="akaTelefon" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
+          <Property Name="akaFakulte" Type="Byte" />
+          <Property Name="akaBolum" Type="Int32" />
+          <Property Name="akaStajTuru" Type="Byte" />
+          <NavigationProperty Name="TBL_Bolumler" Relationship="Self.FK_TBL_Akademisyenler_TBL_Bolumler" FromRole="TBL_Akademisyenler" ToRole="TBL_Bolumler" />
+          <NavigationProperty Name="TBL_Fakulteler" Relationship="Self.FK_TBL_Akademisyenler_TBL_Fakulteler" FromRole="TBL_Akademisyenler" ToRole="TBL_Fakulteler" />
+          <NavigationProperty Name="TBL_Dosyalar" Relationship="Self.FK_TBL_Dosyalar_TBL_Akademisyenler" FromRole="TBL_Akademisyenler" ToRole="TBL_Dosyalar" />
+          <NavigationProperty Name="TBL_Bildirimler" Relationship="internshipManagementModel.FK_TBL_Bildirimler_TBL_Akademisyenler" FromRole="TBL_Akademisyenler" ToRole="TBL_Bildirimler" />
+          <Property Name="akaSifre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="TBL_Bolumler">
+          <Key>
+            <PropertyRef Name="bolumID" />
+          </Key>
+          <Property Name="bolumID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="bolumAdi" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="fakulteID" Type="Byte" />
+          <NavigationProperty Name="TBL_Akademisyenler" Relationship="Self.FK_TBL_Akademisyenler_TBL_Bolumler" FromRole="TBL_Bolumler" ToRole="TBL_Akademisyenler" />
+          <NavigationProperty Name="TBL_Ogrenciler" Relationship="Self.FK_TBL_Ogrenciler_TBL_Bolumler" FromRole="TBL_Bolumler" ToRole="TBL_Ogrenciler" />
+        </EntityType>
+        <EntityType Name="TBL_Dosyalar">
+          <Key>
+            <PropertyRef Name="dosyaID" />
+          </Key>
+          <Property Name="dosyaID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="dosyaAdi" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="dosyaTarihi" Type="DateTime" Precision="3" />
+          <Property Name="dosyaGonderen" Type="Int32" />
+          <Property Name="dosyaAciklama" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="dosyaDurum" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="stajTuru" Type="Byte" />
+          <Property Name="dosyaDegerlendiren" Type="Int32" />
+          <Property Name="dosyaYolu" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="TBL_Akademisyenler" Relationship="Self.FK_TBL_Dosyalar_TBL_Akademisyenler" FromRole="TBL_Dosyalar" ToRole="TBL_Akademisyenler" />
+          <NavigationProperty Name="TBL_Ogrenciler" Relationship="Self.FK_TBL_Dosyalar_TBL_Ogrenciler" FromRole="TBL_Dosyalar" ToRole="TBL_Ogrenciler" />
+          <NavigationProperty Name="TBL_StajTurleri" Relationship="Self.FK_TBL_Dosyalar_TBL_StajTurleri" FromRole="TBL_Dosyalar" ToRole="TBL_StajTurleri" />
+        </EntityType>
+        <EntityType Name="TBL_Fakulteler">
+          <Key>
+            <PropertyRef Name="fakulteID" />
+          </Key>
+          <Property Name="fakulteID" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fakulteAdi" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="TBL_Akademisyenler" Relationship="Self.FK_TBL_Akademisyenler_TBL_Fakulteler" FromRole="TBL_Fakulteler" ToRole="TBL_Akademisyenler" />
+          <NavigationProperty Name="TBL_Ogrenciler" Relationship="Self.FK_TBL_Ogrenciler_TBL_Fakulteler" FromRole="TBL_Fakulteler" ToRole="TBL_Ogrenciler" />
+        </EntityType>
+        <EntityType Name="TBL_Ogrenciler">
+          <Key>
+            <PropertyRef Name="ogrenciID" />
+          </Key>
+          <Property Name="ogrenciID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ogrenciAdi" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ogrenciSoyadi" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ogrenciNo" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="ogrenciFakulte" Type="Byte" />
+          <Property Name="ogrenciBolum" Type="Int32" />
+          <Property Name="ogrenciTelefon" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
+          <Property Name="ogrenciMail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ogrenciSifre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="TBL_Bolumler" Relationship="Self.FK_TBL_Ogrenciler_TBL_Bolumler" FromRole="TBL_Ogrenciler" ToRole="TBL_Bolumler" />
+          <NavigationProperty Name="TBL_Dosyalar" Relationship="Self.FK_TBL_Dosyalar_TBL_Ogrenciler" FromRole="TBL_Ogrenciler" ToRole="TBL_Dosyalar" />
+          <NavigationProperty Name="TBL_Fakulteler" Relationship="Self.FK_TBL_Ogrenciler_TBL_Fakulteler" FromRole="TBL_Ogrenciler" ToRole="TBL_Fakulteler" />
+          <NavigationProperty Name="TBL_Bildirimler" Relationship="internshipManagementModel.FK_TBL_Bildirimler_TBL_Ogrenciler" FromRole="TBL_Ogrenciler" ToRole="TBL_Bildirimler" />
+        </EntityType>
+        <EntityType Name="TBL_StajTurleri">
+          <Key>
+            <PropertyRef Name="stajID" />
+          </Key>
+          <Property Name="stajID" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="stajAdi" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="TBL_Dosyalar" Relationship="Self.FK_TBL_Dosyalar_TBL_StajTurleri" FromRole="TBL_StajTurleri" ToRole="TBL_Dosyalar" />
+        </EntityType>
+        <Association Name="FK_TBL_Akademisyenler_TBL_Bolumler">
+          <End Role="TBL_Bolumler" Type="Self.TBL_Bolumler" Multiplicity="0..1" />
+          <End Role="TBL_Akademisyenler" Type="Self.TBL_Akademisyenler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TBL_Bolumler">
+              <PropertyRef Name="bolumID" />
+            </Principal>
+            <Dependent Role="TBL_Akademisyenler">
+              <PropertyRef Name="akaBolum" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TBL_Akademisyenler_TBL_Fakulteler">
+          <End Role="TBL_Fakulteler" Type="Self.TBL_Fakulteler" Multiplicity="0..1" />
+          <End Role="TBL_Akademisyenler" Type="Self.TBL_Akademisyenler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TBL_Fakulteler">
+              <PropertyRef Name="fakulteID" />
+            </Principal>
+            <Dependent Role="TBL_Akademisyenler">
+              <PropertyRef Name="akaFakulte" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TBL_Dosyalar_TBL_Akademisyenler">
+          <End Role="TBL_Akademisyenler" Type="Self.TBL_Akademisyenler" Multiplicity="0..1" />
+          <End Role="TBL_Dosyalar" Type="Self.TBL_Dosyalar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TBL_Akademisyenler">
+              <PropertyRef Name="akaID" />
+            </Principal>
+            <Dependent Role="TBL_Dosyalar">
+              <PropertyRef Name="dosyaDegerlendiren" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TBL_Ogrenciler_TBL_Bolumler">
+          <End Role="TBL_Bolumler" Type="Self.TBL_Bolumler" Multiplicity="0..1" />
+          <End Role="TBL_Ogrenciler" Type="Self.TBL_Ogrenciler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TBL_Bolumler">
+              <PropertyRef Name="bolumID" />
+            </Principal>
+            <Dependent Role="TBL_Ogrenciler">
+              <PropertyRef Name="ogrenciBolum" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TBL_Dosyalar_TBL_Ogrenciler">
+          <End Role="TBL_Ogrenciler" Type="Self.TBL_Ogrenciler" Multiplicity="0..1" />
+          <End Role="TBL_Dosyalar" Type="Self.TBL_Dosyalar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TBL_Ogrenciler">
+              <PropertyRef Name="ogrenciID" />
+            </Principal>
+            <Dependent Role="TBL_Dosyalar">
+              <PropertyRef Name="dosyaGonderen" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TBL_Dosyalar_TBL_StajTurleri">
+          <End Role="TBL_StajTurleri" Type="Self.TBL_StajTurleri" Multiplicity="0..1" />
+          <End Role="TBL_Dosyalar" Type="Self.TBL_Dosyalar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TBL_StajTurleri">
+              <PropertyRef Name="stajID" />
+            </Principal>
+            <Dependent Role="TBL_Dosyalar">
+              <PropertyRef Name="stajTuru" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TBL_Ogrenciler_TBL_Fakulteler">
+          <End Role="TBL_Fakulteler" Type="Self.TBL_Fakulteler" Multiplicity="0..1" />
+          <End Role="TBL_Ogrenciler" Type="Self.TBL_Ogrenciler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TBL_Fakulteler">
+              <PropertyRef Name="fakulteID" />
+            </Principal>
+            <Dependent Role="TBL_Ogrenciler">
+              <PropertyRef Name="ogrenciFakulte" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="internshipManagementEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="TBL_Akademisyenler" EntityType="Self.TBL_Akademisyenler" />
+          <EntitySet Name="TBL_Bolumler" EntityType="Self.TBL_Bolumler" />
+          <EntitySet Name="TBL_Dosyalar" EntityType="Self.TBL_Dosyalar" />
+          <EntitySet Name="TBL_Fakulteler" EntityType="Self.TBL_Fakulteler" />
+          <EntitySet Name="TBL_Ogrenciler" EntityType="Self.TBL_Ogrenciler" />
+          <EntitySet Name="TBL_StajTurleri" EntityType="Self.TBL_StajTurleri" />
+          <AssociationSet Name="FK_TBL_Akademisyenler_TBL_Bolumler" Association="Self.FK_TBL_Akademisyenler_TBL_Bolumler">
+            <End Role="TBL_Bolumler" EntitySet="TBL_Bolumler" />
+            <End Role="TBL_Akademisyenler" EntitySet="TBL_Akademisyenler" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TBL_Akademisyenler_TBL_Fakulteler" Association="Self.FK_TBL_Akademisyenler_TBL_Fakulteler">
+            <End Role="TBL_Fakulteler" EntitySet="TBL_Fakulteler" />
+            <End Role="TBL_Akademisyenler" EntitySet="TBL_Akademisyenler" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TBL_Dosyalar_TBL_Akademisyenler" Association="Self.FK_TBL_Dosyalar_TBL_Akademisyenler">
+            <End Role="TBL_Akademisyenler" EntitySet="TBL_Akademisyenler" />
+            <End Role="TBL_Dosyalar" EntitySet="TBL_Dosyalar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TBL_Ogrenciler_TBL_Bolumler" Association="Self.FK_TBL_Ogrenciler_TBL_Bolumler">
+            <End Role="TBL_Bolumler" EntitySet="TBL_Bolumler" />
+            <End Role="TBL_Ogrenciler" EntitySet="TBL_Ogrenciler" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TBL_Dosyalar_TBL_Ogrenciler" Association="Self.FK_TBL_Dosyalar_TBL_Ogrenciler">
+            <End Role="TBL_Ogrenciler" EntitySet="TBL_Ogrenciler" />
+            <End Role="TBL_Dosyalar" EntitySet="TBL_Dosyalar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TBL_Dosyalar_TBL_StajTurleri" Association="Self.FK_TBL_Dosyalar_TBL_StajTurleri">
+            <End Role="TBL_StajTurleri" EntitySet="TBL_StajTurleri" />
+            <End Role="TBL_Dosyalar" EntitySet="TBL_Dosyalar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TBL_Ogrenciler_TBL_Fakulteler" Association="Self.FK_TBL_Ogrenciler_TBL_Fakulteler">
+            <End Role="TBL_Fakulteler" EntitySet="TBL_Fakulteler" />
+            <End Role="TBL_Ogrenciler" EntitySet="TBL_Ogrenciler" />
+          </AssociationSet>
+          <EntitySet Name="TBL_Bildirimler" EntityType="internshipManagementModel.TBL_Bildirimler" />
+          <AssociationSet Name="FK_TBL_Bildirimler_TBL_Akademisyenler" Association="internshipManagementModel.FK_TBL_Bildirimler_TBL_Akademisyenler">
+            <End Role="TBL_Akademisyenler" EntitySet="TBL_Akademisyenler" />
+            <End Role="TBL_Bildirimler" EntitySet="TBL_Bildirimler" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TBL_Bildirimler_TBL_Ogrenciler" Association="internshipManagementModel.FK_TBL_Bildirimler_TBL_Ogrenciler">
+            <End Role="TBL_Ogrenciler" EntitySet="TBL_Ogrenciler" />
+            <End Role="TBL_Bildirimler" EntitySet="TBL_Bildirimler" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="TBL_Bildirimler">
+          <Key>
+            <PropertyRef Name="bildirimID" />
+          </Key>
+          <Property Name="bildirimID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="bildirimGonderen" Type="Int32" />
+          <Property Name="bildirimAlan" Type="Int32" />
+          <Property Name="bildirimTarih" Type="DateTime" Precision="3" />
+          <Property Name="bildirimIcerik" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="bildirimOkunduMu" Type="Boolean" />
+          <NavigationProperty Name="TBL_Akademisyenler" Relationship="internshipManagementModel.FK_TBL_Bildirimler_TBL_Akademisyenler" FromRole="TBL_Bildirimler" ToRole="TBL_Akademisyenler" />
+          <NavigationProperty Name="TBL_Ogrenciler" Relationship="internshipManagementModel.FK_TBL_Bildirimler_TBL_Ogrenciler" FromRole="TBL_Bildirimler" ToRole="TBL_Ogrenciler" />
+        </EntityType>
+        <Association Name="FK_TBL_Bildirimler_TBL_Akademisyenler">
+          <End Type="internshipManagementModel.TBL_Akademisyenler" Role="TBL_Akademisyenler" Multiplicity="0..1" />
+          <End Type="internshipManagementModel.TBL_Bildirimler" Role="TBL_Bildirimler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TBL_Akademisyenler">
+              <PropertyRef Name="akaID" />
+            </Principal>
+            <Dependent Role="TBL_Bildirimler">
+              <PropertyRef Name="bildirimGonderen" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TBL_Bildirimler_TBL_Ogrenciler">
+          <End Type="internshipManagementModel.TBL_Ogrenciler" Role="TBL_Ogrenciler" Multiplicity="0..1" />
+          <End Type="internshipManagementModel.TBL_Bildirimler" Role="TBL_Bildirimler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TBL_Ogrenciler">
+              <PropertyRef Name="ogrenciID" />
+            </Principal>
+            <Dependent Role="TBL_Bildirimler">
+              <PropertyRef Name="bildirimAlan" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="internshipManagementModelStoreContainer" CdmEntityContainer="internshipManagementEntities">
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="internshipManagementModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_Akademisyenler">
+            <EntityTypeMapping TypeName="internshipManagementModel.TBL_Akademisyenler">
+              <MappingFragment StoreEntitySet="TBL_Akademisyenler">
+                <ScalarProperty Name="akaSifre" ColumnName="akaSifre" />
+                <ScalarProperty Name="akaID" ColumnName="akaID" />
+                <ScalarProperty Name="akaAdi" ColumnName="akaAdi" />
+                <ScalarProperty Name="akaSoyadi" ColumnName="akaSoyadi" />
+                <ScalarProperty Name="akaMail" ColumnName="akaMail" />
+                <ScalarProperty Name="akaTelefon" ColumnName="akaTelefon" />
+                <ScalarProperty Name="akaFakulte" ColumnName="akaFakulte" />
+                <ScalarProperty Name="akaBolum" ColumnName="akaBolum" />
+                <ScalarProperty Name="akaStajTuru" ColumnName="akaStajTuru" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_Bolumler">
+            <EntityTypeMapping TypeName="internshipManagementModel.TBL_Bolumler">
+              <MappingFragment StoreEntitySet="TBL_Bolumler">
+                <ScalarProperty Name="bolumID" ColumnName="bolumID" />
+                <ScalarProperty Name="bolumAdi" ColumnName="bolumAdi" />
+                <ScalarProperty Name="fakulteID" ColumnName="fakulteID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_Dosyalar">
+            <EntityTypeMapping TypeName="internshipManagementModel.TBL_Dosyalar">
+              <MappingFragment StoreEntitySet="TBL_Dosyalar">
+                <ScalarProperty Name="dosyaID" ColumnName="dosyaID" />
+                <ScalarProperty Name="dosyaAdi" ColumnName="dosyaAdi" />
+                <ScalarProperty Name="dosyaTarihi" ColumnName="dosyaTarihi" />
+                <ScalarProperty Name="dosyaGonderen" ColumnName="dosyaGonderen" />
+                <ScalarProperty Name="dosyaAciklama" ColumnName="dosyaAciklama" />
+                <ScalarProperty Name="dosyaDurum" ColumnName="dosyaDurum" />
+                <ScalarProperty Name="stajTuru" ColumnName="stajTuru" />
+                <ScalarProperty Name="dosyaDegerlendiren" ColumnName="dosyaDegerlendiren" />
+                <ScalarProperty Name="dosyaYolu" ColumnName="dosyaYolu" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_Fakulteler">
+            <EntityTypeMapping TypeName="internshipManagementModel.TBL_Fakulteler">
+              <MappingFragment StoreEntitySet="TBL_Fakulteler">
+                <ScalarProperty Name="fakulteID" ColumnName="fakulteID" />
+                <ScalarProperty Name="fakulteAdi" ColumnName="fakulteAdi" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_Ogrenciler">
+            <EntityTypeMapping TypeName="internshipManagementModel.TBL_Ogrenciler">
+              <MappingFragment StoreEntitySet="TBL_Ogrenciler">
+                <ScalarProperty Name="ogrenciID" ColumnName="ogrenciID" />
+                <ScalarProperty Name="ogrenciAdi" ColumnName="ogrenciAdi" />
+                <ScalarProperty Name="ogrenciSoyadi" ColumnName="ogrenciSoyadi" />
+                <ScalarProperty Name="ogrenciNo" ColumnName="ogrenciNo" />
+                <ScalarProperty Name="ogrenciFakulte" ColumnName="ogrenciFakulte" />
+                <ScalarProperty Name="ogrenciBolum" ColumnName="ogrenciBolum" />
+                <ScalarProperty Name="ogrenciTelefon" ColumnName="ogrenciTelefon" />
+                <ScalarProperty Name="ogrenciMail" ColumnName="ogrenciMail" />
+                <ScalarProperty Name="ogrenciSifre" ColumnName="ogrenciSifre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_StajTurleri">
+            <EntityTypeMapping TypeName="internshipManagementModel.TBL_StajTurleri">
+              <MappingFragment StoreEntitySet="TBL_StajTurleri">
+                <ScalarProperty Name="stajID" ColumnName="stajID" />
+                <ScalarProperty Name="stajAdi" ColumnName="stajAdi" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_Bildirimler">
+            <EntityTypeMapping TypeName="internshipManagementModel.TBL_Bildirimler">
+              <MappingFragment StoreEntitySet="TBL_Bildirimler">
+                <ScalarProperty Name="bildirimOkunduMu" ColumnName="bildirimOkunduMu" />
+                <ScalarProperty Name="bildirimIcerik" ColumnName="bildirimIcerik" />
+                <ScalarProperty Name="bildirimTarih" ColumnName="bildirimTarih" />
+                <ScalarProperty Name="bildirimAlan" ColumnName="bildirimAlan" />
+                <ScalarProperty Name="bildirimGonderen" ColumnName="bildirimGonderen" />
+                <ScalarProperty Name="bildirimID" ColumnName="bildirimID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

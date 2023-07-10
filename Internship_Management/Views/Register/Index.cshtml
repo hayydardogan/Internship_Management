@@ -1,0 +1,171 @@
+﻿@model Internship_Management.Models.Entity.TBL_Ogrenciler
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html :class="{ 'theme-dark': dark }" x-data="data()" lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hesap Oluştur</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet" />
+    <link rel="stylesheet" href="~/site-template/public/assets/css/tailwind.output.css" />
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"
+            defer></script>
+    <script src="~/site-template/public/assets/js/init-alpine.js"></script>
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://kit.fontawesome.com/ece0471f46.js" crossorigin="anonymous"></script>
+    <script>
+
+
+        //Fakülte değiştiğinde bölümlerin değişmesi fonksiyonu
+        function changeDepartment() {
+            var t = $('#drpFakulte').val();
+            $.ajax({
+                url: '/Register/changeDepartment',
+                data: { id: t },
+                type: "POST",
+                dataType: "Json",
+                success: function (data) {
+                    $('#drpBolumler').empty();
+                    for (var i = 0; i < data.length; i++) {
+                        $('#drpBolumler').append("<option value = '" + data[i].Value + "'>" + data[i].Text + "</Option>");
+                    }
+                }
+            });
+        }
+        //Fakülte değiştiğinde bölümlerin değişmesi fonksiyonunun çağırılması
+        $(function () {
+            $('#drpFakulte').change(function () {
+                changeDepartment();
+            })
+        });
+
+        // Sayfa yüklendiğinde - hazır olduğunda gerçekleştirilecek func.
+        // Çoğu func buraya yazabilirsin
+        $(document).ready(function () {
+
+            // changeDepartment func.çağırılması
+            changeDepartment();
+
+            // Hesap oluştur butonuna tıklanılması
+            $('#createAccount').on("click", function () {
+
+                let ogr = {
+                    ogrenciAdi: $("#ogrAdi").val(),
+                    ogrenciSoyadi: $("#ogrSoyadi").val(),
+                    ogrenciFakulte: $("#drpFakulte").val(),
+                    ogrenciBolum: $("#drpBolumler").val(),
+                    ogrenciMail: $("#ogrMail").val(),
+                    ogrenciTelefon: $("#ogrTelefon").val(),
+                    ogrenciNo: $("#ogrNo").val(),
+                    ogrenciSifre: $("#ogrSifre").val()
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Register/CreateAccount/",
+                    data: ogr,
+                    success: function (result) {
+                        if (result == "ok") {
+                            Swal.fire(
+                                'Başarılı',
+                                'Başarıyla kayıt oldunuz.',
+                                'success'
+                            )
+                        }
+                        else {
+                            alert("hata");
+                        }
+                    }
+                });
+
+            });
+        });
+
+
+    </script>
+</head>
+<body>
+    <div class="flex items-center min-h-screen p-6 bg-gray-50 dark:bg-gray-900">
+        <div class="flex-1 h-full max-w-4xl mx-auto overflow-hidden bg-white rounded-lg shadow-xl dark:bg-gray-800">
+            <div class="flex flex-col overflow-y-auto md:flex-row">
+                <div class="h-32 md:h-auto md:w-1/2">
+                    <img aria-hidden="true"
+                         class="object-cover w-full h-full dark:hidden"
+                         src="~/site-template/public/assets/img/create-account-office.jpeg"
+                         alt="Office" />
+                    <img aria-hidden="true"
+                         class="hidden object-cover w-full h-full dark:block"
+                         src="~/site-template/public/assets/img/create-account-office-dark.jpeg"
+                         alt="Office" />
+                </div>
+                <div class="flex items-center justify-center p-6 sm:p-12 md:w-1/2">
+                    <div class="w-full">
+                        <h1 class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200">
+                            Hesap Oluştur
+                        </h1>
+                        <div style="display:flex; gap:5px;">
+                            <label class="block mt-1 text-sm">
+                                <span class="text-gray-700 dark:text-gray-400">Ad</span>
+                                @Html.TextBoxFor(x => x.ogrenciAdi, new { @class = "block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input", @placeholder = "Adınız", id = "ogrAdi" })
+                            </label>
+                            <label class="block mt-1 text-sm">
+                                <span class="text-gray-700 dark:text-gray-400">Soyad</span>
+                                @Html.TextBoxFor(x => x.ogrenciSoyadi, new { @class = "block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input", @placeholder = "Soyadınız", id = "ogrSoyadi" })
+                            </label>
+                        </div>
+                        <label class="block mt-4 text-sm">
+                            <span class="text-gray-700 dark:text-gray-400">E-Posta</span>
+                            @Html.TextBoxFor(x => x.ogrenciMail, new { @class = "block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input", @placeholder = "ornek@ornek.com", id = "ogrMail" })
+                        </label>
+                        <label class="block mt-4 text-sm">
+                            <span class="text-gray-700 dark:text-gray-400">Öğrenci Numarası</span>
+                            @Html.TextBoxFor(x => x.ogrenciNo, new { @class = "block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input", @placeholder = "123456789", id = "ogrNo" })
+                        </label>
+                        <label class="block mt-4 text-sm">
+                            <span class="text-gray-700 dark:text-gray-400">
+                                Fakülte
+                            </span>
+                            @Html.DropDownListFor(m => m.TBL_Fakulteler.fakulteID, (List<SelectListItem>)ViewBag.fklt, new { @class = "block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray", id = "drpFakulte" })
+                        </label>
+                        <label class="block mt-4 text-sm">
+                            <span class="text-gray-700 dark:text-gray-400">
+                                Bölüm
+                            </span>
+                            @Html.DropDownListFor(m => m.TBL_Bolumler.bolumID, (List<SelectListItem>)ViewBag.blm, new { @class = "block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray", id = "drpBolumler" })
+                        </label>
+                        <label class="block mt-4 text-sm">
+                            <span class="text-gray-700 dark:text-gray-400">Telefon</span>
+                            @Html.TextBoxFor(x => x.ogrenciTelefon, new { @class = "block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input", @placeholder = "05** *** ****", id = "ogrTelefon" })
+                        </label>
+                        <label class="block mt-4 text-sm">
+                            <span class="text-gray-700 dark:text-gray-400">Şifre</span>
+                            @Html.TextBoxFor(x => x.ogrenciSifre, new { @class = "block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input", @placeholder = "****", type = "password", id = "ogrSifre" })
+                        </label>
+                        <p id="errorMessage" class="mt-2 text-m" style="color: #b88414; display:none;"><i class="fa-solid fa-triangle-exclamation mr-2" style="color: #b88414;"></i>Hata mesajı önizleme</p>
+                        <button id="createAccount" class="block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                            Hesap Oluştur
+                        </button>
+
+                        <hr class="my-8" />
+
+
+
+                        <p class="mt-4">
+                            <a class="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline"
+                               href="/Login/Index">
+                                Zaten bir hesabım var
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
